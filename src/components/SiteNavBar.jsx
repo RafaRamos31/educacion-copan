@@ -1,5 +1,5 @@
 import { Navbar, Container, Nav, Button, Modal, NavDropdown } from "react-bootstrap";
-import logo from "../assets/images/logo-salud.png";
+import logo from "../assets/images/logo-educacion.png";
 import { Link, useNavigate } from "react-router-dom";
 import { Login } from "../views/Login";
 import { useContext, useState, useEffect } from "react";
