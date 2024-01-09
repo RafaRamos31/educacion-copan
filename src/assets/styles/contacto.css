@@ -1,0 +1,13 @@
+.titulo-contacto{
+  text-align: center;
+  font-size: 70px;
+  font-weight: 700;
+  margin-top: 10px;
+}
+
+.subtitulo-contacto{
+  text-align: center;
+  font-size: 30px;
+  font-style: italic;
+  margin-top: -10px;
+}

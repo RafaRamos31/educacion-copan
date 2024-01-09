@@ -1,0 +1,133 @@
+#main-image{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  object-fit: cover;
+  filter: opacity(40%)
+}
+
+section:first-child{
+  height: 92vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: baseline;
+}
+
+#main-title{
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 5rem;
+  color: black;
+}
+
+#text-departamento{
+  margin: 3rem 0;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 2.5rem;
+  color: black;
+}
+
+.sub-title{
+  text-transform: uppercase;
+  text-align: center;
+  font-weight: bold;
+  font-size: 2.5rem;
+  color: black;
+  margin: 3rem 0;
+}
+
+.nosotros-container{
+  background-color: var(--mp-gris-5);
+}
+
+.text-nosotros{
+  text-align: justify;
+}
+
+#img-about{
+  height: 100%;
+  object-fit: cover;
+}
+
+.text-fundador{
+  font-style: italic;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.autor{
+  font-weight: bold;
+}
+
+.item{
+  background-color: var(--mp-azul-5);
+  transition: 0.2s ease-in-out;
+}
+
+.item:hover{
+  background-color: var(--mp-azul-3);
+}
+
+h3{
+  text-align: center;
+}
+
+.text-icon{
+  margin-right: 2rem;
+}
+
+.icon{
+  background-color: var(--mp-azul-6);
+  display: flex;
+  justify-content: center;
+  border-radius: 10px;
+  padding: 1rem;
+  font-weight: bold;
+  font-size: 1.5rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  transition: 0.2s ease-in-out;
+}
+
+.content{
+  padding: 1rem;
+  text-align: justify;
+}
+
+b{
+  font-size: larger;
+  margin: 0.5rem 0;
+}
+
+.media-container{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.img-organigrama{
+  object-fit: cover;
+}
+
+@media screen and (max-width: 760px) {
+  #main-title{
+    font-size: 3rem;
+  }
+  
+  #text-departamento{
+    margin: 2rem 0;
+    font-size: 1.5rem;
+  }
+}
+
+.config-button{
+  position: absolute;
+  top: 80px;
+  right: 10px;
+}
