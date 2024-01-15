@@ -64,8 +64,7 @@ export const Home = () => {
               : ''
           }
           <Image src={fondo} className="animate__animated animate__fadeIn" id="main-image" fluid/>
-          <h1 id="main-title" className="animate__animated animate__fadeInUp">{staticInfo.titulo}</h1>
-          <p id="text-departamento" className="animate__animated animate__fadeInUp">{staticInfo.subtitulo}</p>
+          <h1 id="main-title" className="animate__animated animate__fadeInUp py-5">{staticInfo.subtitulo}</h1>
         </section>
 
         <section className="sobre-nosotros" id="sobre-nosotros">

@@ -60,14 +60,14 @@ export const SiteNavBar = () => {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav variant="underline" className="ml-auto">
             <Link to={'/'} className={`nav-link ${actual === '' ? 'active' : ''}`}><i className="bi bi-house-fill"></i>{' '}Inicio</Link>
-            <Link to={'/noticias'} className={`nav-link ${actual === 'noticias' ? 'active' : ''}`}><i className="bi bi-newspaper"></i>{' '}Publicaciones</Link>
             <Link to={'/recursos'} className={`nav-link ${actual === 'recursos' ? 'active' : ''}`}><i className="bi bi-archive-fill"></i>{' '}Recursos</Link>
+            <Link to={'/noticias'} className={`nav-link ${actual === 'noticias' ? 'active' : ''}`}><i className="bi bi-newspaper"></i>{' '}Noticias</Link>
             <Link to={'/contacto'} className={`nav-link ${actual === 'contacto' ? 'active' : ''}`}><i className="bi bi-telephone-fill"></i>{' '}Contacto</Link>
             {
               valid ? 
               <NavDropdown
                 id="nav-dropdown-dark-example"
-                title={'S.E. COPÁN'}
+                title={userData.name}
                 menuVariant="light"
                 align='end'
               >

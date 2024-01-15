@@ -63,6 +63,23 @@ export const Footer = () => {
 
           <hr className="w-100 clearfix d-md-none" />
 
+          <div className="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
+            <h6 className="text-uppercase mb-4 font-weight-bold">
+              {'Enlaces de Interés'}
+            </h6>
+            <ul>
+              <li><a className="text-white" href="https://arsa.gob.hn/" target='_blank' rel='noreferrer'>ARSA</a></li>
+              <li><a className="text-white" href="https://www.se.gob.hn/" target='_blank' rel='noreferrer'>SEDUC</a></li>
+              <li><a className="text-white" href="https://www.salud.gob.hn/sshome/" target='_blank' rel='noreferrer'>SESAL</a></li>
+              <li><a className="text-white" href="https://www.utsan.hn/" target='_blank' rel='noreferrer'>UTSAN</a></li>
+              <li><a className="text-white" href="https://www.paho.org/es/honduras?page=1" target='_blank' rel='noreferrer'>OPS</a></li>
+              <li><a className="text-white" href="https://www.incap.int/index.php/es/" target='_blank' rel='noreferrer'>INCAP</a></li>
+              <li><a className="text-white" href="https://www.sgjd.gob.hn/" target='_blank' rel='noreferrer'>SGDJ</a></li>
+              <li><a className="text-white" href="https://www.unicef.org/honduras/" target='_blank' rel='noreferrer'>UNICEF</a></li>
+              <li><a className="text-white" href="https://www.advancingnutrition.org/where-we-work/honduras" target='_blank' rel='noreferrer'>USAID AN</a></li>
+            </ul>
+          </div>
+
           <hr className="w-100 clearfix d-md-none" />
 
           <div className="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
