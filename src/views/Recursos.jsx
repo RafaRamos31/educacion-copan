@@ -65,7 +65,7 @@ export const Recursos = () => {
         }
         settotaldocs(jsonData?.count)
       } catch (error) {
-        console.error(error.message);
+        throw error;
       }
     }
     fetchData();

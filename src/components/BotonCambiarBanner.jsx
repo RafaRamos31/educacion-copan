@@ -10,11 +10,6 @@ export const BotonCambiarBanner = ({show=false}) => {
     }
   };
 
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    console.log(file)
-  };
-
   const inputRef = React.createRef();
 
   return (

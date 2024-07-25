@@ -52,7 +52,6 @@ export async function register({username, nombre}) {
 }
 
 export async function cambiarPassword({password, confirmarPassword, idUsuario}) {
-  console.log(password, confirmarPassword, idUsuario)
   if(password !== confirmarPassword){
     return false;
   }

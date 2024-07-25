@@ -25,7 +25,7 @@ export const BarraFiltrosOficios = ({setDocumentos, setImagenes, setView}) => {
         setDocumentos(archivos)
         setImagenes(imagenes)
       } catch (error) {
-        console.error(error.message);
+        throw error;
       }
     }
 
