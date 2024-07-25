@@ -1,16 +1,16 @@
 import useFetch from "../hooks/useFetch.js";
-//import { mockDepartamentos } from "../services/mock-service.js";
 import useForm from "../hooks/useForm.js";
 import { sendNoticia } from "../services/noticias-service.js";
 import { Button, Card, FloatingLabel, Form, Spinner } from 'react-bootstrap';
 import { useContext, useEffect, useState } from "react";
 import { RefetchContext } from "../contexts/RefetchContext.js";
 import { ToastContext } from "../contexts/ToastContext.js";
-import dataMunicipios from "../data/municipiosCopan.json";
 
 export const Publicar = ({handleClose}) => {
 
-  const { data, isLoading } = useFetch(process.env.REACT_APP_API_URL + '/departamentos');
+  const { data, isLoading } = useFetch(process.env.REACT_APP_API_URL + '/unidadestecnicas');
+
+  const { data: dataMuni, isLoading: isLoadingMuni } = useFetch(process.env.REACT_APP_API_URL + '/municipios');
 
   //Contexts
   const { setRefetch } = useContext(RefetchContext)
@@ -18,7 +18,7 @@ export const Publicar = ({handleClose}) => {
 
   //Formulario
   const { values, handleChange } = useForm({
-    departamento: '',
+    unidadTecnica: '',
     municipio: '',
     contenido: '',
     multimedia: []
@@ -66,11 +66,11 @@ export const Publicar = ({handleClose}) => {
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
           <FloatingLabel label="Unidad Técnica">
-            <Form.Select aria-label="Select Departamento"  id="departamento" name="departamento" onChange={handleChange}>
+            <Form.Select aria-label="Select unidadTecnica"  id="unidadTecnica" name="unidadTecnica" onChange={handleChange}>
               <option>Seleccione una Unidad</option>
               {
                 !isLoading &&
-                data.map(depto => (<option key={depto._id} value={depto._id}>{depto.nombre}</option>))
+                data.map(ut => (<option key={ut._id} value={ut._id}>{ut.nombre}</option>))
               }
             </Form.Select>
           </FloatingLabel>
@@ -78,11 +78,10 @@ export const Publicar = ({handleClose}) => {
         <Form.Group className="mb-3">
           <FloatingLabel label="Municipio">
             <Form.Select aria-label="Select Municipio"  id="municipio" name="municipio" onChange={handleChange}>
-              <option>Seleccione un Municipio</option>
+              <option>Seleccionar Municipio</option>
               {
-                dataMunicipios.municipios.map((municipio, index) => (
-                  <option key={index} value={municipio}>{municipio}</option>
-                ))
+                !isLoadingMuni &&
+                dataMuni.map(municipio => (<option key={municipio._id} value={municipio._id}>{municipio.nombre}</option>))
               }
             </Form.Select>
           </FloatingLabel>

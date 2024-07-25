@@ -1,62 +1,65 @@
 import { useState } from 'react';
-import { Button, Card } from 'react-bootstrap';
-import { FormMunicipio } from '../components/FormMunicipio';
-import { updateContactoConfig } from '../services/config-service';
+import { Button, Card, CloseButton, Modal } from 'react-bootstrap';
+import { EditContacto } from '../components/EditContacto';
+import { FormContacto } from './FormContacto';
 
 export const ConfiguracionContactos = ({data, handleClose=null}) => {
 
   const [contactos, setContactos] = useState(data)
-  
-  const handleAddMunicipio = () => {
-    setContactos([...contactos, {name: '', referencias: [":"]}])
+
+  const handleAddContacto = (contacto) => {
+    setContactos(c => c.map(muni => {
+      if(muni.nombre === contacto.municipio.nombre){
+        muni.contactos.push({
+          _id: contacto._id,
+          establecimiento: contacto.establecimiento,
+          municipio: contacto.municipio._id,
+          municipioName: contacto.municipio.nombre,
+          telefono: contacto.telefono,
+        })
+      }
+      return muni;
+    }))
   }
 
-  const handleDeleteMunicipio = () => {
 
-    var newContactos = [];
-
-    for (var i = 0; i < Object.keys(contactos).length - 1; i++) {
-      newContactos[i] = contactos[i];
-    }
-    setContactos(newContactos)
-  }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    await updateContactoConfig(contactos)
+  //Modal Crear
+  const [showCrear, setShowCrear] = useState(false);
+  const handleCloseCrear = () => setShowCrear(false);
+  const handleShowCrear = () => setShowCrear(true);
   
-    if(!handleClose){
-      window.location.reload();
-    }
-    else{
-      handleClose()
-    } 
-  };
-
   return (
+    <>
     <Card>
       <Card.Header>
-        <h3>Editar Infomación de Contacto</h3>
+        <div className="d-flex justify-content-between align-items-center">
+        <div></div>
+        <h3 className='my-2'>Editar Infomación de Contacto</h3>
+        <CloseButton onClick={handleClose}/>
+        </div>
       </Card.Header>
       <Card.Body style={{backgroundColor: 'var(--mp-azul-4)'}}>
+      <div className="d-grid gap-2 mt-2 mb-4">
+        <Button variant='success' onClick={handleShowCrear}>Agregar Contacto</Button>
+      </div>
         {
           contactos && contactos.map((municipio, index) => (
-            <FormMunicipio municipio={municipio} key={index} index={index} contactos={contactos} setContactos={setContactos}/>
+            <div key={index}>
+            <h4 className='my-0 py-0'>{municipio.nombre}</h4>
+            <hr className='mt-2'/>
+            {
+              municipio.contactos.map((contacto, index) => (
+                <EditContacto key={index} contacto={contacto} />
+              ))
+            }
+            </div>
           ))
         }
-        <Button variant="info" onClick={handleAddMunicipio}>
-          Agregar Municipio
-        </Button>
-        <Button variant="danger" className='mx-2' onClick={handleDeleteMunicipio}>
-          Eliminar Municipio
-        </Button>
       </Card.Body>
-      <Card.Footer className='d-flex justify-content-center'>
-        <Button variant="warning" onClick={handleSubmit}>
-          Guardar Cambios
-        </Button>
-      </Card.Footer>
     </Card>
+    <Modal show={showCrear} onHide={handleCloseCrear} size="lg">
+      <FormContacto handleClose={handleCloseCrear} handleAddContacto={handleAddContacto}/>
+    </Modal>
+    </>
   );
 }

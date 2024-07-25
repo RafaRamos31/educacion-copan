@@ -1,23 +1,41 @@
 import { Accordion, Button, Col, Container, Form, Row, Image, Modal } from "react-bootstrap";
 import useForm from "../hooks/useForm.js";
 import { Layout } from "./Layout.jsx";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../contexts/UserContext.js";
-import banner from "../assets/images/contacto.jpg"
+import banner from "../assets/images/banners/contacto.jpg"
 import '../assets/styles/contacto.css'
 import { LoadingScreen } from "./LoadingScreen.jsx";
 import useFetch from "../hooks/useFetch.js";
 import { ConfiguracionContactos } from "./ConfiguracionContacto.jsx";
 import { sendMail } from "../services/mail-service.js";
-import info from '../data/info-pagina.json';
 
 export const Contacto = () => {
-  const {valid, userData} = useContext(UserContext);
+  const {userData} = useContext(UserContext);
 
-  const { data, isLoading } = useFetch(process.env.REACT_APP_API_URL +  `/config/contactos`);
+  const { data: dataMuni, isLoading: isLoadingMuni } = useFetch(process.env.REACT_APP_API_URL +  `/municipios`);
 
-  const { values, handleChange } = useForm({
-    pagina: info.subtitulo,
+  const { data, isLoading } = useFetch(process.env.REACT_APP_API_URL +  `/contactos`);
+
+  const [contactos, setContactos] = useState(null)
+
+  useEffect(() => {
+    if(!isLoading && data && !isLoadingMuni && dataMuni){
+      const formatted = data.map(municipio => {
+        municipio.nombre = dataMuni.find(m => m._id === municipio._id)?.nombre;
+        municipio.contactos = municipio.contactos.map(c => {
+          c.municipioName = municipio.nombre;
+          return c;
+        })
+        return municipio;
+      })
+      setContactos(formatted)
+    }
+
+  }, [data, isLoading, dataMuni, isLoadingMuni])
+  
+
+  const { values, handleChange, resetForm } = useForm({
     nombre: "",
     apellido: "",
     municipio: "",
@@ -30,11 +48,16 @@ export const Contacto = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     await sendMail(values);
+    resetForm();
+    alert('Correo Enviado');
   };
 
   //Modal Contacto
   const [showContacto, setShowContacto] = useState(false);
-  const handleCloseContacto = () => setShowContacto(false);
+  const handleCloseContacto = () => {
+    setShowContacto(false)
+    window.location.reload();
+  };
   const handleShowContacto = () => setShowContacto(true);
 
   if(isLoading){
@@ -47,21 +70,20 @@ export const Contacto = () => {
       <Image src={banner}
       className="animate__animated animate__fadeIn w-100" fluid/>
       <h1 className="titulo-contacto">CONTACTO</h1>
-      <p className="subtitulo-contacto">Estamos para ayudarle</p>
       <Container>
         <Row>
           <Col lg={5} className="px-4">
             <h3 className="my-3">Nuestros Telefonos</h3>
             <Accordion alwaysOpen>
               {
-                data.contactos && data.contactos.map((municipio, index) => (
+                contactos && contactos.map((municipio, index) => (
                   <Accordion.Item key={index} eventKey={index}>
-                    <Accordion.Header>{municipio.name}</Accordion.Header>
+                    <Accordion.Header>{municipio.nombre}</Accordion.Header>
                     <Accordion.Body>
                       <ul>
                         {
-                          municipio.referencias.map((ref, i) => (
-                            <li key={i}>{ref}</li>
+                          municipio.contactos.map((ref, i) => (
+                            <li key={i}>{`${ref.establecimiento}: ${ref.telefono}`}</li>
                           ))
                         }
                       </ul>
@@ -71,7 +93,7 @@ export const Contacto = () => {
               }
             </Accordion>
             {
-              (valid && userData.rol !== 'Publish') ?  
+              (userData && userData.rol === 'ADMIN') ?  
                 <Button variant="warning" className="mt-3" onClick={handleShowContacto}>
                   <i className="bi bi-tools"></i>{' '}Editar
                 </Button>
@@ -88,6 +110,7 @@ export const Contacto = () => {
                     <Form.Control
                       name="nombre"
                       id="nombre"
+                      value={values.nombre}
                       onChange={handleChange}
                       required
                     />
@@ -99,6 +122,7 @@ export const Contacto = () => {
                     <Form.Control
                       name="apellido"
                       id="apellido"
+                      value={values.apellido}
                       onChange={handleChange}
                       required
                     />
@@ -112,6 +136,7 @@ export const Contacto = () => {
                     <Form.Control
                       name="municipio"
                       id="municipio"
+                      value={values.municipio}
                       onChange={handleChange}
                       required
                     />
@@ -123,6 +148,7 @@ export const Contacto = () => {
                     <Form.Control
                       name="comunidad"
                       id="comunidad"
+                      value={values.comunidad}
                       onChange={handleChange}
                     />
                   </Form.Group>
@@ -136,6 +162,7 @@ export const Contacto = () => {
                       type="email"
                       name="correo"
                       id="correo"
+                      value={values.correo}
                       onChange={handleChange}
                     />
                   </Form.Group>
@@ -146,6 +173,7 @@ export const Contacto = () => {
                     <Form.Control
                       name="telefono"
                       id="telefono"
+                      value={values.telefono}
                       onChange={handleChange}
                       required
                     />
@@ -160,6 +188,7 @@ export const Contacto = () => {
                   style={{ height: "200px" }}
                   name="asunto"
                   id="asunto"
+                  value={values.asunto}
                   onChange={handleChange}
                   required
                 />
@@ -177,7 +206,7 @@ export const Contacto = () => {
       </Container>            
     </Layout>
     <Modal show={showContacto} onHide={handleCloseContacto} size="lg">
-      <ConfiguracionContactos data={data.contactos} handleClose={handleCloseContacto}/>
+      <ConfiguracionContactos data={data} handleClose={handleCloseContacto}/>
     </Modal>
     </>
   );

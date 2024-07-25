@@ -1,5 +1,9 @@
 
 export async function enviarArchivos(files){
+  const formData = new FormData();
+  for(let el of files){
+    formData.append(el.nombre, el);
+  }
   let archivos = []
 
   for (let i = 0; i < files.length; i++) {
@@ -14,15 +18,13 @@ export async function enviarArchivos(files){
 }
 
 export async function publicarArchivos(files){
-  const sendData = await enviarArchivos(files)
-  sendData.forEach(async file => {
-    const formData = new FormData();
-    formData.append('id', file.id);
-    formData.append('nombre', file.nombre);
-    formData.append('weight', file.weight);
-
+  
     // Realiza la solicitud al backend
     try {
+      const formData = new FormData();
+      for(let el of files){
+        formData.append(el.nombre, el);
+      }
       await fetch(process.env.REACT_APP_API_URL + '/archivos', {
         method: "POST",
         body: formData,
@@ -30,8 +32,45 @@ export async function publicarArchivos(files){
     } catch (error) {
       throw new Error("Error al publicar el archivo: " + error);
     }
-  })
   return true
+}
+
+export async function publicarImagenHome(nombre, file){
+  // Realiza la solicitud al backend
+  try {
+    const formData = new FormData();
+    formData.append('imagen', file);
+    formData.append('nombre', nombre);
+    
+    const result = await fetch(process.env.REACT_APP_API_URL + '/images', {
+      method: "PUT",
+      body: formData,
+    });
+    return result.ok;
+
+  } catch (error) {
+    throw new Error("Error al subir imagen: " + error);
+  }
+}
+
+
+export async function publicarArchivosNoticia(files, id){
+  
+  // Realiza la solicitud al backend
+  try {
+    const formData = new FormData();
+    formData.append('id', id);
+    for(let el of files){
+      formData.append(el.nombre, el);
+    }
+    await fetch(process.env.REACT_APP_API_URL + '/noticias/addfile', {
+      method: "PUT",
+      body: formData,
+    });
+  } catch (error) {
+    throw new Error("Error al modificar el archivo: " + error);
+  }
+return true
 }
 
 export async function sendArchivo(file) {
@@ -111,8 +150,12 @@ const sendAllChunks = async (id, file) => {
 }
 
 export async function aumentarDescarga(fileId){
-  fetch(process.env.REACT_APP_API_URL + '/archivos/' + fileId, {
-    method: "PUT"
+  const data = new FormData();
+
+  data.append('id', fileId)
+  fetch(process.env.REACT_APP_API_URL + '/archivos/sumar', {
+    method: "PUT",
+    body: data
   });
 }
 
@@ -120,7 +163,7 @@ export async function aumentarDescarga(fileId){
 export async function modificarArchivo(url, values){
   const data = new FormData();
 
-  data.append('idArchivo', values.idArchivo)
+  data.append('id', values.id)
   data.append('nombre', values.nombre)
 
   try {
@@ -140,7 +183,7 @@ export async function modificarArchivo(url, values){
 export async function eliminarArchivo(fileId){
   const data = new FormData();
 
-  data.append('idArchivo', fileId)
+  data.append('id', fileId)
 
   const result = await fetch(process.env.REACT_APP_API_URL + '/archivos', {
     method: "DELETE",

@@ -1,10 +1,13 @@
 import { getImageUrl } from '../../services/stringFormatter'
-import { Image } from 'react-bootstrap'
 
 export const ImagenGaleria = ({enlace, modal=false}) => {
   return (
-    <>
-      <Image className='noticia-img mx-auto' src={getImageUrl(enlace)} style={!modal ? {maxWidth: '95vw',  maxHeight: '100%'} : {}} />
-    </>
+    <div className='d-flex mx-auto'>
+      <div style={{padding: '1rem', backgroundColor: 'lightgray'}}>
+        <iframe style={{border: 0, height: modal ? 600 : 'auto', width: modal ? 600 : 'auto'}} title={enlace} 
+        src={getImageUrl(enlace)}
+        ></iframe>
+      </div>
+    </div>
   )
 }

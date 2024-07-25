@@ -1,12 +1,16 @@
 import { Button, Modal } from "react-bootstrap"
 import useFetch from "../hooks/useFetch";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ConfiguracionFooter } from "../views/ConfiguracionFooter";
-import info from '../data/info-pagina.json'
+import { getDepartamento, getTitle } from "../services/info-service";
+import logo from "../assets/images/logos/logoHonduras.png";
+import { UserContext } from "../contexts/UserContext";
+
 
 export const Footer = () => {
+  const {userData} = useContext(UserContext);
   const [values, setValues] = useState({});
-  const { data: mongoData, isLoading } = useFetch(process.env.REACT_APP_API_URL +  `/config/footer`);
+  const { data: mongoData, isLoading } = useFetch(process.env.REACT_APP_API_URL +  `/footer`);
 
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -33,11 +37,11 @@ export const Footer = () => {
         <div className="row">
           <div className="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
             <h6 className="text-uppercase mb-4 font-weight-bold">
-              {info.subtitulo}
+              {`${getTitle(process.env.REACT_APP_WEB_SECTOR)} de ${getDepartamento(process.env.REACT_APP_WEB_DEPTO)}`}
             </h6>
-            <p>
-            {values.footerDesc}
-            </p>
+            <div className="d-flex align-items-center justify-content-center">
+              <img src={logo} style={{width: '10rem'}} alt="logoHonduras"></img>
+            </div>
           </div>
 
           <hr className="w-100 clearfix d-md-none" />
@@ -84,74 +88,72 @@ export const Footer = () => {
 
           <div className="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
             <h6 className="text-uppercase mb-4 font-weight-bold">Contacto</h6>
-            <p><i className="fas fa-home mr-3"></i>{' '}{values.footerDireccion}</p>
-            <p><i className="fas fa-envelope mr-3"></i>{' '}{values.footerCorreo}</p>
-            <p><i className="fas fa-phone mr-3"></i>{' '}{values.footerTelefonos}</p>
+            <p><i className="fas fa-home mr-3"></i>{' '}{values.direccion}</p>
+            <p><i className="fas fa-envelope mr-3"></i>{' '}{values.correo}</p>
+            <p><i className="fas fa-phone mr-3"></i>{' '}{values.telefono}</p>
           </div>
 
           <div className="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
             <h6 className="text-uppercase mb-4 font-weight-bold">Nuestras Redes</h6>
 
             {
-              values.footerRedes && values.footerRedes[0].exists &&
+              values.facebook &&
               <a
                 className="btn btn-primary btn-floating m-1"
                 style={{backgroundColor: "#3b5998"}}
-                href={values.footerRedes[0].enlace}
+                href={values.facebook}
+                target="_blank"
+                rel="noreferrer"
                 role="button"
                 ><i className="fab fa-facebook-f"></i>
               </a>
             }
 
             {
-              values.footerRedes && values.footerRedes[1].exists &&
-              <a
-              className="btn btn-primary btn-floating m-1"
-              style={{backgroundColor: "#55acee"}}
-              href={values.footerRedes[1].enlace}
-              role="button"
-              ><i className="fab fa-twitter"></i>
-              </a>
-            }
-            
-
-            {
-              values.footerRedes && values.footerRedes[2].exists &&
-              <a
-              className="btn btn-primary btn-floating m-1"
-              style={{backgroundColor: "#dd4b39"}}
-              href={values.footerRedes[2].enlace}
-              role="button"
-              ><i className="fab fa-google"></i>
-              </a>
-            }
-
-            {
-              values.footerRedes && values.footerRedes[3].exists &&
-              <a
-              className="btn btn-primary btn-floating m-1"
-              style={{backgroundColor: "#c4302b"}}
-              href={values.footerRedes[3].enlace}
-              role="button"
-              ><i className="fab fa-youtube"></i>
-              </a>
-            }
-
-            {
-              values.footerRedes && values.footerRedes[4].exists &&
+              values.instagram &&
               <a
               className="btn btn-primary btn-floating m-1"
               style={{backgroundColor: "#ac2bac"}}
-              href={values.footerRedes[4].enlace}
+              href={values.instagram}
+              target="_blank"
+              rel="noreferrer"
               role="button"
               ><i className="fab fa-instagram"></i>
               </a>
             }
 
+            {
+              values.twitter &&
+              <a
+              className="btn btn-primary btn-floating m-1"
+              style={{backgroundColor: "#55acee"}}
+              href={values.twitter}
+              target="_blank"
+              rel="noreferrer"
+              role="button"
+              ><i className="fab fa-twitter"></i>
+              </a>
+            }
+
+            {
+              values.youtube &&
+              <a
+              className="btn btn-primary btn-floating m-1"
+              style={{backgroundColor: "#c4302b"}}
+              href={values.youtube}
+              target="_blank"
+              rel="noreferrer"
+              role="button"
+              ><i className="fab fa-youtube"></i>
+              </a>
+            }
             <div>
-            <Button variant="warning" onClick={handleShow}>
-              <i className="bi bi-tools"></i>{' '}Modificar
-            </Button> 
+            {
+              (userData && userData.rol === 'ADMIN') && 
+              <Button variant="warning" onClick={handleShow}>
+                <i className="bi bi-tools"></i>{' '}Modificar
+              </Button> 
+            }
           </div>
           </div>
         </div>
@@ -162,7 +164,7 @@ export const Footer = () => {
          style={{backgroundColor: "var(--mp-rojo-1)"}}
          >
       © 2023 Copyright:
-      <br /><a className="text-white" href={values.footerEnlace}>{info.subtitulo}
+      <br /><a className="text-white" href={values.footerEnlace}>{`${getTitle(process.env.REACT_APP_WEB_SECTOR)} de ${getDepartamento(process.env.REACT_APP_WEB_DEPTO)}`}
       </a>
     </div>
   </footer>

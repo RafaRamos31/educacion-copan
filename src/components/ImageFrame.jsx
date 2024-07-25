@@ -9,7 +9,7 @@ export const ImageFrame = ({imagen, imageId}) => {
   //Visibilidad del componente
   const [visible, setVisible] = useState(true);
 
-  const {valid} = useContext(UserContext)
+  const { userData } = useContext(UserContext)
   const {setShowToast, actualizarTitulo, setContent, setVariant} = useContext(ToastContext)
 
   //Modal Eliminar
@@ -57,7 +57,7 @@ export const ImageFrame = ({imagen, imageId}) => {
         <Fotografia key={imagen._id} enlace={imagen.enlace}/>
       </Card.Body>
       {
-        (valid) &&
+        (userData) &&
         <Card.Footer>
           <Button variant="danger" className="mx-3" onClick={handleShowEliminar}><i className="bi bi-tools"></i>{' '}Eliminar</Button>
         </Card.Footer>

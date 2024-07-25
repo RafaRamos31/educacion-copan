@@ -8,7 +8,9 @@ import { RefetchContext } from "../contexts/RefetchContext.js";
 import { ToastContext } from "../contexts/ToastContext.js";
 
 export const ModificarPublicacion = ({handleClose, noticia}) => {
-  const { data, isLoading } = useFetch(process.env.REACT_APP_API_URL + '/departamentos');
+  const { data, isLoading } = useFetch(process.env.REACT_APP_API_URL + '/unidadestecnicas');
+
+  const { data: dataMuni, isLoading: isLoadingMuni } = useFetch(process.env.REACT_APP_API_URL + '/municipios');
 
   //Contexts
   const { setRefetch } = useContext(RefetchContext)
@@ -16,8 +18,9 @@ export const ModificarPublicacion = ({handleClose, noticia}) => {
 
   //Formulario
   const { values, handleChange } = useForm({
-    idPublicacion: noticia._id,
-    departamento: noticia.departamento._id,
+    id: noticia._id,
+    unidadTecnicaId: noticia.unidadTecnica._id,
+    municipioId: noticia.municipio._id,
     contenido: noticia.contenido
   });
 
@@ -62,12 +65,23 @@ export const ModificarPublicacion = ({handleClose, noticia}) => {
       <Card.Body>
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
-          <FloatingLabel label="Departamento">
-            <Form.Select aria-label="Select Departamento"  id="departamento" name="departamento" onChange={handleChange} value={values.departamento}>
-              <option>Seleccione un Departamento</option>
+          <FloatingLabel label="Unidad Técnica">
+            <Form.Select id="unidadTecnicaId" name="unidadTecnicaId" onChange={handleChange} value={values.unidadTecnicaId}>
+              <option>Seleccione una Unidad Técnica</option>
               {
                 !isLoading &&
                 data.map(depto => (<option key={depto._id} value={depto._id}>{depto.nombre}</option>))
+              }
+            </Form.Select>
+          </FloatingLabel>
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <FloatingLabel label="Municipio">
+            <Form.Select id="municipioId" name="municipioId" onChange={handleChange} value={values.municipioId}>
+              <option>Seleccione un Municipio</option>
+              {
+                !isLoadingMuni &&
+                dataMuni.map(municipio => (<option key={municipio._id} value={municipio._id}>{municipio.nombre}</option>))
               }
             </Form.Select>
           </FloatingLabel>

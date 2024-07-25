@@ -5,12 +5,12 @@ export async function updateGeneralConfig(values) {
   formValues.append("nosotros", values.nosotros);
   formValues.append("mensaje", values.mensaje);
   formValues.append("autor", values.autor);
+  formValues.append("cargo", values.cargo);
   formValues.append("mision", values.mision);
   formValues.append("vision", values.vision);
-  formValues.append("urlMapa", values.urlMapa);
 
   try {
-    const response = await fetch(process.env.REACT_APP_API_URL + '/config/general', {
+    const response = await fetch(process.env.REACT_APP_API_URL + '/home', {
       method: "PUT",
       body: formValues,
     });
@@ -53,15 +53,16 @@ export async function updateValoresConfig(names, values) {
 export async function updateFooterConfig(values) {
 
   const formValues = new FormData();
-  formValues.append("footerCorreo", values.footerCorreo);
-  formValues.append("footerDireccion", values.footerDireccion);
-  formValues.append("footerTelefonos", values.footerTelefonos);
-  formValues.append("footerDesc", values.footerDesc);
-  formValues.append("footerEnlace", values.footerEnlace);
-  formValues.append("footerRedes", JSON.stringify(values.footerRedes));
+  formValues.append("correo", values.correo);
+  formValues.append("direccion", values.direccion);
+  formValues.append("telefono", values.telefono);
+  formValues.append("facebook", values.facebook);
+  formValues.append("instagram", values.instagram);
+  formValues.append("youtube", values.youtube);
+  formValues.append("twitter", values.twitter);
   
   try {
-    const response = await fetch(process.env.REACT_APP_API_URL + '/config/footer', {
+    const response = await fetch(process.env.REACT_APP_API_URL + '/footer', {
       method: "PUT",
       body: formValues,
     });

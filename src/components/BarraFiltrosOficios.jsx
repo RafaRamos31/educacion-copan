@@ -3,19 +3,9 @@ import {  Nav, NavDropdown, Navbar, Tab } from 'react-bootstrap';
 
 export const BarraFiltrosOficios = ({setDocumentos, setImagenes, setView}) => {
 
-  const [query, setQuery] = useState('');
+  const [query] = useState('');
   const [refetch, setRefetch] = useState(false);
   
-  const handleChange = (e) => {
-    const value = e.target.value;
-    setQuery(value);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setRefetch(true)
-  }
-
   //Buscar noticias
   useEffect(() => {
     const fetchData = async () => {

@@ -36,7 +36,6 @@ export const Configuracion = ({data, handleClose=null}) => {
           />
         </Form.Group>
 
-        {/* 
         <Form.Group className="mb-3">
           <Form.Label htmlFor="mensaje">Mensaje de representante</Form.Label>
           <Form.Control
@@ -55,7 +54,12 @@ export const Configuracion = ({data, handleClose=null}) => {
             <Form.Control aria-label="Representante"  id="autor" name="autor" onChange={handleChange} value={values.autor} required/>
           </FloatingLabel>
         </Form.Group>
-        */}
+
+        <Form.Group className="mb-4">
+          <FloatingLabel label="Cargo">
+            <Form.Control aria-label="Cargo"  id="cargo" name="cargo" onChange={handleChange} value={values.cargo} required/>
+          </FloatingLabel>
+        </Form.Group>
         
         <Form.Group className="mb-3">
         <Form.Label htmlFor="mision">Misión</Form.Label>
@@ -81,11 +85,6 @@ export const Configuracion = ({data, handleClose=null}) => {
             value={values.vision}
             onChange={handleChange}
           />
-        </Form.Group>
-        <Form.Group className="mb-4">
-          <FloatingLabel label="Enlace Mapa">
-            <Form.Control aria-label="Enlace Mapa"  id="urlMapa" name="urlMapa" onChange={handleChange} value={values.urlMapa} required/>
-          </FloatingLabel>
         </Form.Group>
         <Button as="input" variant="info" type="submit" value="Guardar Cambios" />
       </Form>

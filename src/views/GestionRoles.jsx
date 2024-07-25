@@ -9,26 +9,27 @@ import { UserContext } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 import { ToastContext } from "../contexts/ToastContext";
 import { deleteUser } from "../services/login-service";
+import { CambiarPassword } from "./CambiarPassword";
 
 export const GestionRoles = () => {
   //Validacion
-  const {valid, userData} = useContext(UserContext);
+  const {userData} = useContext(UserContext);
 
   //Toast
   const {setShowToast, actualizarTitulo, setContent, setVariant} = useContext(ToastContext)
 
   const navigation = useNavigate()
   useEffect(() => {
-    if(!valid || userData.rol !== 'Master'){
+    if(userData?.rol !== 'ADMIN'){
       navigation('/')
     }
 
-  }, [valid, userData, navigation])
+  }, [userData, navigation])
 
   const [selected, setSelected] = useState('')
   const [selectedId, setSelectedId] = useState('')
   
-  const { data, isLoading } = useFetch(process.env.REACT_APP_API_URL + '/admin/userlist');
+  const { data, isLoading } = useFetch(process.env.REACT_APP_API_URL + '/usuarios/list');
 
   //usuarios
   const [master, setMaster] = useState(null)
@@ -36,8 +37,8 @@ export const GestionRoles = () => {
 
   useEffect(() => {
     if(data && users === null){
-      setMaster(data.filter((user) => user.rol === 'Master')[0])
-      setUsers(data.filter((user) => user.rol !== 'Master'))
+      setMaster(data.filter((user) => user.rol === 'ADMIN')[0])
+      setUsers(data.filter((user) => user.rol !== 'ADMIN'))
     }
   
   }, [data, isLoading, users])
@@ -52,6 +53,11 @@ export const GestionRoles = () => {
   const [showEliminar, setShowEliminar] = useState(false);
   const handleCloseEliminar = () => setShowEliminar(false);
 
+  //Modal Password
+  const [showFirst, setShowFirst] = useState(false);
+  const handleCloseFirst = () => setShowFirst(false);
+  const handleShowFirst = () => setShowFirst(true);
+
   const handleShowEliminar = (id, username) => {
     setShowEliminar(true);
     setSelected(username)
@@ -63,23 +69,21 @@ export const GestionRoles = () => {
   const [correct, setCorrect] = useState(null);
 
   const handleDelete = async () => {
-    console.log(selectedId)
     const result = await deleteUser(selectedId)
     setUsers(users.filter((user) => user.username !== selected))
-
     setSelected('')
     setShowEliminar(false)
     setCorrect(result)
   }
 
   useEffect(() => {
-    if(correct === true){
+    if(correct===true){
       actualizarTitulo('Usuario Eliminado')
       setContent('El usuario se ha eliminado.')
       setVariant('info')
       setShowToast(true)
     }
-    if(correct === false){
+    if(correct===false){
       actualizarTitulo('Error al Eliminar Usuario')
       setContent('Ocurrio un error al tratar de eliminar el usuario, intente de nuevo.')
       setVariant('danger')
@@ -91,7 +95,7 @@ export const GestionRoles = () => {
   return (
     <Layout pagina={"Gestión de Roles"}>
       <Container>
-      <h1 className="titulo-contacto">GESTIÓN DE ROLES</h1>
+      <h1 className="titulo-contacto">GESTIÓN DE USUARIOS</h1>
         <Table responsive bordered>
           <thead>
             <tr>
@@ -99,8 +103,6 @@ export const GestionRoles = () => {
               <th>Username</th>
               <th>Nombre</th>
               <th>Rol</th>
-              <th>Municipio</th>
-              <th>Unidad Tecnica</th>
               <th>Última Conexión</th>
               <th>Editar</th>
             </tr>
@@ -113,12 +115,10 @@ export const GestionRoles = () => {
                 <td>{master.username}</td>
                 <td>{master.nombre}</td>
                 <td>{master.rol}</td>
-                <td>{master.municipio}</td>
-                <td>{master.unidad}</td>
                 <td>{getDateString(master.ultimaConexion)}</td>
                 <td className="d-flex justify-content-center align-items-center">
-                  <Button variant="warning" onClick={() => handleShowEliminar(master.username)}>
-                    <i className="bi bi-tools"></i>{' '}Modificar
+                  <Button variant="warning" onClick={() => handleShowFirst()}>
+                    <i className="bi bi-tools"></i>{' '}Cambiar Contraseña
                   </Button>
                 </td>
               </tr>
@@ -130,8 +130,6 @@ export const GestionRoles = () => {
                   <td>{user.username}</td>
                   <td>{user.nombre}</td>
                   <td>{user.rol}</td>
-                  <td>{user.municipio}</td>
-                  <td>{user.unidad}</td>
                   <td>{getDateString(user.ultimaConexion)}</td>
                   <td className="d-flex justify-content-center align-items-center">
                     <Button variant="danger" onClick={() => handleShowEliminar(user._id, user.username)}>
@@ -166,6 +164,10 @@ export const GestionRoles = () => {
             Eliminar Usuario
           </Button>
         </Modal.Footer>
+      </Modal>
+
+      <Modal show={showFirst} onHide={handleCloseFirst}>
+        <CambiarPassword handleClose={handleCloseFirst} />
       </Modal>
     </Layout>
   );

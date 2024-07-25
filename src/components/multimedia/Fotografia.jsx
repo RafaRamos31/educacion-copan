@@ -1,24 +1,28 @@
 import React, { useState } from 'react'
 import { getImageUrl } from '../../services/stringFormatter'
-import { Image, Modal } from 'react-bootstrap'
+import { Modal } from 'react-bootstrap'
 
 export const Fotografia = ({enlace}) => {
 
   //Modal vista ampliada
   const [showVista, setShowVista] = useState(false);
+  const handleShowVista = () => setShowVista(true);
   const handleCloseVista = () => setShowVista(false);
-  const handleShowVista = (e) => {
-    e.stopPropagation();
-    setShowVista(true);
-  }
+
 
   return (
     <>
-      <Image className='noticia-img' src={getImageUrl(enlace)} onClick={handleShowVista} thumbnail fluid/>
+      <div style={{padding: '1rem', backgroundColor: 'lightgray'}} onClick={handleShowVista}>
+        <iframe style={{border: 0}} title={enlace} onClick={handleShowVista}
+        src={getImageUrl(enlace)}
+        ></iframe>
+      </div>
 
       {/*Modal Vista Previa*/}
       <Modal size='lg' show={showVista} centered onHide={handleCloseVista}>
-        <Image src={getImageUrl(enlace)} thumbnail fluid/>
+        <iframe style={{border: 0}} title={enlace} height={600}
+          src={getImageUrl(enlace)}
+          ></iframe>
       </Modal>
     </>
   )

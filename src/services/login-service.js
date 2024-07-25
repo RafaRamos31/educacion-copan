@@ -7,7 +7,7 @@ export async function sendLogin(nombre, password) {
   formValues.append("password", password);
 
   try {
-    const response = await fetch(process.env.REACT_APP_API_URL + '/login', {
+    const response = await fetch(process.env.REACT_APP_API_URL + '/usuarios/login', {
       method: "POST",
       body: formValues,
     });
@@ -23,22 +23,20 @@ export async function sendLogin(nombre, password) {
 }
 
 export function logout(){
-  localStorage.removeItem("user-id");
+  localStorage.removeItem("user-token");
   window.location.reload();
 }
 
 
-export async function register({username, nombre, rol, masterId}) {
+export async function register({username, nombre}) {
   
   const formValues = new FormData();
 
   formValues.append("username", username);
   formValues.append("nombre", nombre);
-  formValues.append("rol", rol);
-  formValues.append("masterId", masterId);
 
   try {
-    const response = await fetch(process.env.REACT_APP_API_URL + '/register', {
+    const response = await fetch(process.env.REACT_APP_API_URL + '/usuarios/register', {
       method: "POST",
       body: formValues,
     });
@@ -47,7 +45,7 @@ export async function register({username, nombre, rol, masterId}) {
       throw new Error("Error al registrar usuario");
     }
     const jsonData = await response.json();
-    return jsonData;
+    return {...jsonData, valid: response.ok};
   } catch (error) {
     return error.message;
   }
@@ -61,12 +59,12 @@ export async function cambiarPassword({password, confirmarPassword, idUsuario}) 
 
   const formValues = new FormData();
 
-  formValues.append("idUsuario", idUsuario);
+  formValues.append("id", idUsuario);
   formValues.append("password", password);
 
   try {
-    const response = await fetch(process.env.REACT_APP_API_URL + '/setpassword', {
-      method: "POST",
+    const response = await fetch(process.env.REACT_APP_API_URL + '/usuarios/password', {
+      method: "PUT",
       body: formValues,
     });
     return response.ok
@@ -80,14 +78,14 @@ export async function deleteUser(userId) {
 
   const formValues = new FormData();
 
-  formValues.append("idUsuario", userId);
+  formValues.append("id", userId);
 
   try {
     const response = await fetch(process.env.REACT_APP_API_URL + '/usuarios', {
       method: "DELETE",
       body: formValues,
     });
-    return response.ok
+    return response.ok;
 
   } catch (error) {
     return error.message;

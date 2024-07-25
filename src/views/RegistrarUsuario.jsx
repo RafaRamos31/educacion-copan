@@ -1,22 +1,18 @@
 import { useContext, useEffect, useState } from "react";
 import useForm from "../hooks/useForm.js";
-import { Button, Card, FloatingLabel, Form, Modal, Spinner } from 'react-bootstrap';
+import { Button, Card, Form, Modal, Spinner } from 'react-bootstrap';
 import { ToastContext } from "../contexts/ToastContext.js";
-import { UserContext } from "../contexts/UserContext.js";
 import { register } from "../services/login-service.js";
 
 export const RegistrarUsuario = ({handleClose}) => {
   //Contexts
-  const { userData } = useContext(UserContext)
   const {setShowToast, actualizarTitulo, setContent, setVariant} = useContext(ToastContext)
 
  
   //Formulario
   const { values, handleChange } = useForm({
     nombre: '',
-    username: '',
-    rol: '',
-    masterId: userData._id
+    username: ''
   });
 
   //Boton de carga
@@ -39,7 +35,7 @@ export const RegistrarUsuario = ({handleClose}) => {
     e.preventDefault();
     setCharging(true)
     const result = await register(values)
-    setCorrect(!!result.valid)
+    setCorrect(result.valid)
     setCodigo(result.codigo)
     setCharging(false)
   };
@@ -67,21 +63,11 @@ export const RegistrarUsuario = ({handleClose}) => {
       <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-4">
             <Form.Label>Nombre Completo</Form.Label>
-            <Form.Control aria-label="Nombre"  id="nombre" name="nombre" onChange={handleChange} placeholder="Su nombre y apellido. Ej. Juan Gomez" required/>
+            <Form.Control aria-label="Nombre"  id="nombre" name="nombre" autoComplete="off" onChange={handleChange} placeholder="Su nombre y apellido. Ej. Juan Gomez" required/>
           </Form.Group>
           <Form.Group className="mb-4">
             <Form.Label>Nombre de usuario</Form.Label>
-            <Form.Control aria-label="Usuario"  id="username" name="username" onChange={handleChange} placeholder="Ej. juangomez01" required/>
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <FloatingLabel label="Rol">
-              <Form.Select aria-label="Select Rol"  id="rol" name="rol" onChange={handleChange}>
-                <option>Rol de usuario</option>
-                <option value={'Admin'}>Administrador</option>
-                <option value={'Publish'}>Publicador</option>
-                <option value={'Viewer'}>Lector</option>
-              </Form.Select>
-            </FloatingLabel>
+            <Form.Control aria-label="Usuario"  id="username" name="username" autoComplete="off" onChange={handleChange} placeholder="Ej. juangomez01" required/>
           </Form.Group>
         <div className="d-grid gap-2">
           {

@@ -1,34 +1,53 @@
 import useFetch from "../hooks/useFetch.js";
 import { Layout } from "./Layout.jsx";
-import { Button, Card, Col, Container, Image, Row, Modal } from "react-bootstrap";
-import fondo from "../assets/images/direccion-educacion.jpg"
-import organigrama from "../assets/images/organigrama.jpeg"
-//import lider from "../assets/images/representante.jpg"
-import valoresImg from "../assets/images/valores.png"
-import nosotros from "../assets/images/logo-nosotros.png"
+import { Button, Card, Col, Container, Row, Modal } from "react-bootstrap";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../contexts/UserContext.js";
 import { Configuracion } from "./Configuracion.jsx";
 import { LoadingScreen } from "./LoadingScreen.jsx";
-import { FrameCambiarImagen } from "../components/FrameCambiarImagen.jsx";
+import { HomeImage } from "../components/FrameCambiarImagen.jsx";
 import { ConfiguracionValores } from "./ConfiguracionValores.jsx";
-import staticInfo from '../data/info-pagina.json'
+import { getDepartamento, getTitle } from "../services/info-service.js";
+import { HomeBackground } from "../components/HomeBackground.jsx";
 import '../assets/styles/home.css';
 
 export const Home = () => {
-  const {valid, userData} = useContext(UserContext);
+  const {userData} = useContext(UserContext);
 
+  const { data: dataImages, isLoading: isLoadingImages } = useFetch(process.env.REACT_APP_API_URL + '/images');
+
+  const [images, setImages] = useState([]) 
+  useEffect(() => {
+    if(dataImages && !isLoadingImages){
+      const formatted = {}
+      dataImages.map(i => {
+        formatted[i.nombre] = {
+          _id: i._id,
+          nombre: i.nombre,
+          fileId: i.fileId,
+          enlace: i.enlace
+        }
+        return i;
+      })
+      setImages(formatted)
+    }
+  }, [dataImages, isLoadingImages])
+  
+  
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   //Modal Valores
   const [showValores, setShowValores] = useState(false);
-  const handleCloseValores = () => setShowValores(false);
+  const handleCloseValores = () => {
+    setShowValores(false);
+    window.location.reload();
+  };
   const handleShowValores = () => setShowValores(true);
 
   const [values, setValues] = useState({});
-  const { data: mongoData, isLoading } = useFetch(process.env.REACT_APP_API_URL +  `/config/general`);
+  const { data: mongoData, isLoading } = useFetch(process.env.REACT_APP_API_URL +  `/home`);
 
   useEffect(() => {
     if(mongoData){
@@ -37,8 +56,8 @@ export const Home = () => {
   }, [mongoData, isLoading])
 
 
-  const [valoresValues, setValoresValues] = useState({});
-  const { data: valoresData, isLoading: valoresLoading } = useFetch(process.env.REACT_APP_API_URL +  `/config/valores`);
+  const [valoresValues, setValoresValues] = useState([]);
+  const { data: valoresData, isLoading: valoresLoading } = useFetch(process.env.REACT_APP_API_URL +  `/valores`);
 
   useEffect(() => {
     if(valoresData){
@@ -47,7 +66,7 @@ export const Home = () => {
   }, [valoresData, valoresLoading])
 
 
-  if(isLoading){
+  if(isLoading || isLoadingImages){
     return <LoadingScreen />
   }
 
@@ -57,14 +76,14 @@ export const Home = () => {
       <Container>
         <section>
           {
-              (valid && userData.rol !== 'Publish') ? 
+              (userData && userData.rol === 'ADMIN') ? 
               <>
               <Button variant="warning" className="config-button" onClick={handleShow}><i className="bi bi-tools"></i>{' '}Editar Informacion General</Button>
               </>
               : ''
           }
-          <Image src={fondo} className="animate__animated animate__fadeIn" id="main-image" fluid/>
-          <h1 id="main-title" className="animate__animated animate__fadeInUp py-5">{staticInfo.subtitulo}</h1>
+          <HomeBackground />
+          <h1 id="main-title" className="animate__animated animate__fadeInUp py-5">{`${getTitle(process.env.REACT_APP_WEB_SECTOR)} de ${getDepartamento(process.env.REACT_APP_WEB_DEPTO)}`}</h1>
         </section>
 
         <section className="sobre-nosotros" id="sobre-nosotros">
@@ -73,15 +92,32 @@ export const Home = () => {
             <Card.Body className="nosotros-container" style={{borderRadius: '30px'}}>
               <Row>
               <Col md={9} className="d-flex flex-column justify-content-center" >
-                <h3 className="mb-2 w-100 text-center">Historia</h3>
                 <p className="text-nosotros">
                   {values.nosotros}
                 </p>
               </Col>
               <Col md={3}>
-                <FrameCambiarImagen show={valid}>
-                  <Image id="img-about" src={nosotros} fluid roundedCircle style={{backgroundColor: 'white', padding: '2rem'}}/>
-                </FrameCambiarImagen>
+                <HomeImage imagen={images['Nosotros']} edit={userData?.rol === 'ADMIN'}/>
+              </Col>
+            </Row>
+            </Card.Body>
+          </Card>
+        </section>
+
+        <section className="representante" id="representante">
+          <h2 className="sub-title">Nuestro personal</h2>
+          <Card style={{borderRadius: '30px'}}>
+            <Card.Body className="nosotros-container" style={{borderRadius: '30px'}}>
+              <Row>
+              <Col md={9} className="d-flex flex-column justify-content-center" >
+                <p className="text-nosotros">
+                  {values.mensaje}
+                </p>
+                <h6>{values.autor}</h6>
+                <h6><i>{` ${values.cargo || ''}`}</i></h6>
+              </Col>
+              <Col md={3}>
+                <HomeImage imagen={images['Representante']} edit={userData?.rol === 'ADMIN'}/>
               </Col>
             </Row>
             </Card.Body>
@@ -121,9 +157,7 @@ export const Home = () => {
         <section className="organigrama" id="organigrama">
           <h2 className="sub-title">Organigrama</h2>
           <div className="media-container">
-            <FrameCambiarImagen show={valid}>
-              <Image src={organigrama} fluid thumbnail/>
-            </FrameCambiarImagen>
+            <HomeImage imagen={images['Organigrama']} edit={userData?.rol === 'ADMIN'}/>
           </div>
         </section>
 
@@ -133,14 +167,12 @@ export const Home = () => {
             <Card.Body>
               <Row>
                 <Col md={3}>
-                  <FrameCambiarImagen show={valid}>
-                    <Image id="img-about" src={valoresImg} fluid/>
-                  </FrameCambiarImagen>
+                  <HomeImage imagen={images['Valores']} edit={userData?.rol === 'ADMIN'}/>
                 </Col>
                 <Col md={9} className="d-flex flex-column justify-content-center" >
                   <ul>
                     {
-                      valoresValues.valores && valoresValues.valores.map((valor, i) => (<li key={i}>
+                      valoresValues && valoresValues.map((valor, i) => (<li key={i}>
                         <b>{valor.nombre}</b>{': ' + valor.descripcion}
                       </li>))
                     }
@@ -149,7 +181,7 @@ export const Home = () => {
               </Row>
             </Card.Body>
             {
-              (valid && userData.rol !== 'Publish') ? 
+              (userData && userData.rol === 'ADMIN') ? 
                 <Card.Footer>
                   <Button variant="warning" onClick={handleShowValores}><i className="bi bi-tools"></i>{' '}Editar Valores</Button>
                 </Card.Footer>
@@ -161,7 +193,7 @@ export const Home = () => {
         <section className="cobertura" id="cobertura">
           <h2 className="sub-title">Cobertura</h2>
           <div className="media-container">
-            <iframe title={values.departamento} src={values.urlMapa} 
+            <iframe title={'Mapa de Cobertura'} src={process.env.REACT_APP_MAP_URL + '&noprof=1'} 
             width="600" height="480"></iframe>
           </div>
         </section>
@@ -171,7 +203,7 @@ export const Home = () => {
       <Configuracion data={values}/>
     </Modal>
     <Modal show={showValores} onHide={handleCloseValores} size="lg">
-      <ConfiguracionValores data={valoresValues ? valoresValues.valores : null}/>
+      <ConfiguracionValores data={valoresValues} handleClose={handleCloseValores}/>
     </Modal>
     </>
   );

@@ -1,14 +1,13 @@
-import { enviarArchivos } from "./archivos-service.js";
-
 export async function sendNoticia(url, values) {
   
-  const archivos = await enviarArchivos(values.multimedia)
-
   const formValues = new FormData();
-  formValues.append("departamento", values.departamento);
-  formValues.append("municipio", values.municipio);
+  formValues.append("unidadTecnicaId", values.unidadTecnica);
+  formValues.append("municipioId", values.municipio);
   formValues.append("contenido", values.contenido);
-  formValues.append("archivos", JSON.stringify(archivos));
+
+  for(let el of values.multimedia){
+    formValues.append(el.nombre, el);
+  }
 
   try {
     const response = await fetch(url, {
@@ -27,8 +26,9 @@ export async function editNoticia(url, values) {
 
   const formValues = new FormData();
   formValues.append("contenido", values.contenido);
-  formValues.append("departamento", values.departamento);
-  formValues.append("idNoticia", values.idPublicacion);
+  formValues.append("unidadTecnicaId", values.unidadTecnicaId);
+  formValues.append("municipioId", values.municipioId);
+  formValues.append("id", values.id);
 
   try {
     const response = await fetch(url, {
@@ -42,10 +42,11 @@ export async function editNoticia(url, values) {
   }
 }
 
-export async function eliminarNoticia(idNoticia) {
+export async function eliminarNoticia(idNoticia, deleteFiles) {
   
   const formValues = new FormData();
-  formValues.append("idNoticia", idNoticia);
+  formValues.append("id", idNoticia);
+  formValues.append("deleteFiles", deleteFiles);
 
   try {
     const response = await fetch(process.env.REACT_APP_API_URL + '/noticias', {

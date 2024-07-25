@@ -1,33 +1,26 @@
-import { Container, Pagination } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import useFetch from "../hooks/useFetch";
-//import { mockCountNoticias } from "../services/mock-service";
+import { Container, Pagination } from "react-bootstrap";
 
-export const PaginacionNoticias = ({idDepto = '', index, setIndex, searching}) => {
+export const PaginacionNoticias = ({page, total=5, setFilter, searching}) => {
 
-  const {data, isLoading} = useFetch(`${process.env.REACT_APP_API_URL}/countnoticias/${idDepto === null ? '' : idDepto}`);
-  //const {data, isLoading} = mockCountNoticias();
-  const [pages, setPages] = useState(1);
+  const [index, setIndex] = useState(page + 1);
 
   useEffect(() => {
-    if(data){
-      let totalPages = Math.ceil(data.filecount/5);
-      setPages(totalPages);
-    }
-  }, [isLoading, data])
-  
-  const total = pages;
+    setFilter(f => ({...f, page: index-1}));
+  }, [index, setIndex, setFilter])
+
+  const pages = Math.ceil(total/5);
   let numbers = [1, 2, 3, 4, 5];
 
   if(index>3){
     numbers = [index-2, index-1, index, index+1, index+2]
   }
 
-  if(index>(total-2)){
-    numbers = [total-4, total-3, total-2, total-1, total]
+  if(index>(pages-2)){
+    numbers = [pages-4, pages-3, pages-2, pages-1, pages]
   }
 
-  if(total<=5){
+  if(pages<=5){
     numbers = [1, 2, 3, 4, 5];
   }
 
@@ -55,12 +48,12 @@ export const PaginacionNoticias = ({idDepto = '', index, setIndex, searching}) =
         <Pagination.First disabled={ index === 1 } onClick={() => setIndex(1)}/>
         <Pagination.Prev disabled={ index === 1 } onClick={() => setIndex(index-1)}/>
         <Pagination.Item active={numbers[0] === index} onClick={() => setIndex(numbers[0])}>{numbers[0]}</Pagination.Item>
-        <Pagination.Item active={numbers[1] === index} onClick={() => setIndex(numbers[1])} disabled={total<2}>{numbers[1]}</Pagination.Item>
-        <Pagination.Item active={numbers[2] === index} onClick={() => setIndex(numbers[2])} disabled={total<3}>{numbers[2]}</Pagination.Item>
-        <Pagination.Item active={numbers[3] === index} onClick={() => setIndex(numbers[3])} disabled={total<4}>{numbers[3]}</Pagination.Item>
-        <Pagination.Item active={numbers[4] === index} onClick={() => setIndex(numbers[4])} disabled={total<5}>{numbers[4]}</Pagination.Item>
-        <Pagination.Next disabled={ index === total } onClick={() => setIndex(index + 1)}/>
-        <Pagination.Last disabled={ index === total } onClick={() => setIndex(total)}/>
+        <Pagination.Item active={numbers[1] === index} onClick={() => setIndex(numbers[1])} disabled={pages<2}>{numbers[1]}</Pagination.Item>
+        <Pagination.Item active={numbers[2] === index} onClick={() => setIndex(numbers[2])} disabled={pages<3}>{numbers[2]}</Pagination.Item>
+        <Pagination.Item active={numbers[3] === index} onClick={() => setIndex(numbers[3])} disabled={pages<4}>{numbers[3]}</Pagination.Item>
+        <Pagination.Item active={numbers[4] === index} onClick={() => setIndex(numbers[4])} disabled={pages<5}>{numbers[4]}</Pagination.Item>
+        <Pagination.Next disabled={ index === pages || total === 0 } onClick={() => setIndex(index + 1)}/>
+        <Pagination.Last disabled={ index === pages || total === 0 } onClick={() => setIndex(pages)}/>
       </Pagination>
     </Container>
   );

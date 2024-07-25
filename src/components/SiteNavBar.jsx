@@ -1,20 +1,23 @@
 import { Navbar, Container, Nav, Button, Modal, NavDropdown } from "react-bootstrap";
-import logo from "../assets/images/logo-educacion.png";
+import logoEducacion from "../assets/images/logos/logo-educacion.png";
+import logoSalud from "../assets/images/logos/logo_sesal.png";
 import { Link, useNavigate } from "react-router-dom";
 import { Login } from "../views/Login";
 import { useContext, useState, useEffect } from "react";
 import { logout } from "../services/login-service";
 import { UserContext } from "../contexts/UserContext";
 import { CambiarPassword } from "../views/CambiarPassword";
-import info from '../data/info-pagina.json'
+import { getDepartamento, getTitle } from "../services/info-service";
 
 export const SiteNavBar = () => {
   const [actual, setActual] = useState('');
 
   const navigate = useNavigate();
 
+  const logo = process.env.REACT_APP_WEB_SECTOR === '1' ? logoSalud : logoEducacion;
+
   //Contexts
-  const {valid, userData} = useContext(UserContext);
+  const { userData } = useContext(UserContext);
 
   //Modal Login
   const [show, setShow] = useState(false);
@@ -28,7 +31,7 @@ export const SiteNavBar = () => {
   const handleShowFirst = () => setShowFirst(true);
 
   useEffect(() => {
-    if(userData.firstLogin){
+    if(userData?.firstLogin){
       handleShowFirst()
     } 
     const dirs = window.location.href.split('/')[3]
@@ -52,7 +55,7 @@ export const SiteNavBar = () => {
             className="d-inline-block align-top"
           />
           <label className="mt-1 mx-1" style={{cursor: 'pointer'}}>
-          {' ' + info.subtitulo}
+          {` ${getTitle(process.env.REACT_APP_WEB_SECTOR)} de ${getDepartamento(process.env.REACT_APP_WEB_DEPTO)}`}
           </label>
         </Navbar.Brand>
 
@@ -64,15 +67,14 @@ export const SiteNavBar = () => {
             <Link to={'/noticias'} className={`nav-link ${actual === 'noticias' ? 'active' : ''}`}><i className="bi bi-newspaper"></i>{' '}Noticias</Link>
             <Link to={'/contacto'} className={`nav-link ${actual === 'contacto' ? 'active' : ''}`}><i className="bi bi-telephone-fill"></i>{' '}Contacto</Link>
             {
-              valid ? 
+              userData ? 
               <NavDropdown
-                id="nav-dropdown-dark-example"
-                title={userData.name}
+                title={userData.nombre}
                 menuVariant="light"
                 align='end'
               >
                 {
-                  userData.rol === 'Master' ? <NavDropdown.Item onClick={() => navigateLink('/admin/roles')}>Gestión de Roles</NavDropdown.Item> : null
+                  userData.rol === 'ADMIN' ? <NavDropdown.Item onClick={() => navigateLink('/admin/roles')}>Gestión de Usuarios</NavDropdown.Item> : null
                 }
                 <NavDropdown.Divider />
                 <div className="w-100 d-flex justify-content-center">

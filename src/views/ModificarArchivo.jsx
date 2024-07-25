@@ -13,7 +13,7 @@ export const ModificarArchivo = ({handleClose, archivo}) => {
 
   //Formulario
   const { values, handleChange } = useForm({
-    idArchivo: archivo._id,
+    id: archivo._id,
     nombre: archivo.nombre
   });
 
@@ -66,28 +66,6 @@ export const ModificarArchivo = ({handleClose, archivo}) => {
               onChange={handleChange}
               value={values.nombre}
             />
-          </FloatingLabel>
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <FloatingLabel label="Unidad">
-            <Form.Select aria-label=""  id="unidad" name="unidad">
-              <option>Seleccione una Unidad</option>
-              <option value={0}>Copán</option>
-              <option value={1}>Ocotepeque</option>
-              <option value={2}>Lempira</option>
-              <option value={3}>Santa Bárbara</option>
-            </Form.Select>
-          </FloatingLabel>
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <FloatingLabel label="Sub Unidad">
-            <Form.Select aria-label=""  id="subunidad" name="subunidad">
-              <option>Seleccione una Sub Unidad</option>
-              <option value={0}>Copán</option>
-              <option value={1}>Ocotepeque</option>
-              <option value={2}>Lempira</option>
-              <option value={3}>Santa Bárbara</option>
-            </Form.Select>
           </FloatingLabel>
         </Form.Group>
         <div className="d-grid gap-2">

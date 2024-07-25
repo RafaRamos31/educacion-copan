@@ -22,8 +22,8 @@ export const Login = () => {
     setCharging(true)
     const result = await sendLogin(values.usuario, values.password)
     setCharging(false)
-    if(result.valid){
-      localStorage.setItem("user-id", result.id);
+    if(result.token){
+      localStorage.setItem("user-token", result.token);
       window.location.reload();
     }
     else{

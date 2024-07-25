@@ -14,7 +14,7 @@ export const Documento = ({archivo}) => {
   const [count, setCount] = useState(archivo.totalDescargas)
 
   //Contextos
-  const { valid } = useContext(UserContext)
+  const { userData } = useContext(UserContext)
   const {setShowToast, actualizarTitulo, setContent, setVariant} = useContext(ToastContext)
 
   //Modal Vista Previa
@@ -47,8 +47,11 @@ export const Documento = ({archivo}) => {
 
   //Eliminar archivo
   const [correct, setCorrect] = useState(null);
+  const [deleting, setDeleting] = useState(false);
+
 
   const handleDelete = async () => {
+    setDeleting(true);
     const result = await eliminarArchivo(archivo._id)
     setShowEliminar(false)
     setCorrect(result)
@@ -56,20 +59,23 @@ export const Documento = ({archivo}) => {
   }
 
   useEffect(() => {
-    if(correct === true){
-      actualizarTitulo('Archivo Eliminado')
-      setContent('Se ha eliminado con exito el archivo seleccionado.')
-      setVariant('info')
-      setShowToast(true)
-    }
-    if(correct === false){
-      actualizarTitulo('Error al Eliminar Archivo')
-      setContent('Ocurrio un error al tratar de eliminar el archivo, intente de nuevo.')
-      setVariant('danger')
-      setShowToast(true)
+    if(deleting && correct !== null){
+      if(correct){
+        actualizarTitulo('Archivo Eliminado')
+        setContent('Se ha eliminado con exito el archivo seleccionado.')
+        setVariant('info')
+        setShowToast(true)
+      }
+      else{
+        actualizarTitulo('Error al Eliminar Archivo')
+        setContent('Ocurrio un error al tratar de eliminar el archivo, intente de nuevo.')
+        setVariant('danger')
+        setShowToast(true)
+      }
+      setDeleting(false)
     }
   // eslint-disable-next-line
-  }, [correct])
+  }, [correct, deleting])
   
 
   if (!visible) {
@@ -81,7 +87,7 @@ export const Documento = ({archivo}) => {
     <Card className='my-2 px-0 documento mx-auto' style={{maxWidth: '400px'}}>
       <Card.Header style={{backgroundColor: 'var(--mp-azul-5)'}}>{archivo.nombre}</Card.Header>
       <Card.Body className='d-flex flex-wrap justify-content-around'>
-        <Image height={'90px'} width={'90px'} src={require(`../../assets/images/${archivo.docType}_icon.png`)} onClick={handleShowVista} style={{cursor: 'pointer'}}></Image>
+        <Image height={'90px'} width={'90px'} src={require(`../../assets/images/doctypes/${archivo.docType}_icon.png`)} onClick={handleShowVista} style={{cursor: 'pointer'}}></Image>
         <div className='my-auto d-flex  flex-column justify-content-around'>
           <Button variant='info' onClick={handleShowVista} className='mb-3'>
             <i className="bi bi-eye-fill"></i>{' '}Vista Previa
@@ -108,7 +114,7 @@ export const Documento = ({archivo}) => {
       <Card.Footer>
         <Row>
           {
-            valid && 
+            userData && 
             <>
               <Col className='px-1'>
                 <Button variant='warning' onClick={handleShowModificar}>

@@ -6,7 +6,7 @@ const UserContext = createContext();
 
 // Crea un proveedor para el contexto
 const UserContextProvider = ({ children }) => {
-  const user = useValidate(localStorage.getItem("user-id"))
+  const user = useValidate(localStorage.getItem("user-token"))
 
   return (
     <UserContext.Provider value={user}>

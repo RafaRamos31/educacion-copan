@@ -8,10 +8,17 @@ import { ToastContext } from "../contexts/ToastContext";
 import { Galeria } from "./multimedia/Galeria";
 import { DocumentosNoticia } from "./multimedia/DocumentosNoticia";
 import { ModificarPublicacion } from "../views/ModificarPublicacion";
+import { AnexarArchivo } from "../views/AnexarArchivo";
 
 export const Noticia = ({noticia, isModal = false}) => {
+  //Status delete archivos
+  const [deleteFiles, setDeleteFiles] = useState(false);
+  const handleToggle = () => {
+    setDeleteFiles(!deleteFiles)
+  }
+
   //Contexts
-  const {valid} = useContext(UserContext)
+  const {userData} = useContext(UserContext)
   const {setShowToast, actualizarTitulo, setContent, setVariant} = useContext(ToastContext)
 
   //Visibilidad del componente
@@ -21,6 +28,11 @@ export const Noticia = ({noticia, isModal = false}) => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  //Modal Anexar
+  const [showAnexar, setShowAnexar] = useState(false);
+  const handleCloseAnexar = () => setShowAnexar(false);
+  const handleShowAnexar = () => setShowAnexar(true);
 
   //Modal Vista
   const [showVista, setShowVista] = useState(false);
@@ -36,9 +48,12 @@ export const Noticia = ({noticia, isModal = false}) => {
   const [correct, setCorrect] = useState(null);
 
   const handleDelete = async () => {
-    const result = await eliminarNoticia(noticia._id)
+    const result = await eliminarNoticia(noticia._id, deleteFiles)
     setCorrect(result)
-    setVisible(false)
+    handleClose()
+    if(result){
+      setVisible(false)
+    }
   }
 
   useEffect(() => {
@@ -74,13 +89,13 @@ export const Noticia = ({noticia, isModal = false}) => {
         <Row onClick={handleShowVista}>
           <Col sm={8}>
             <div className="h-100 d-flex align-items-center">
-              <Departamento key={noticia._id} nombre={noticia.departamento.nombre} />
+              <Departamento key={noticia._id} nombre={noticia.unidadTecnica.nombre} />
             </div>
           </Col>
           <Col sm={4}>
             <div className="d-flex flex-column align-items-end">
               <h6>{getDateString(noticia.fechaPublicacion)}</h6>
-              <h6>{noticia.municipio}</h6>
+              <h6>{noticia.municipio.nombre}</h6>
             </div>
           </Col>
         </Row>
@@ -95,10 +110,11 @@ export const Noticia = ({noticia, isModal = false}) => {
         </div>
       </Card.Body>
       {
-        (valid && !isModal) &&
+        (userData && !isModal) &&
         <Card.Footer>
-          <Button variant="warning" onClick={handleShowModificar}><i className="bi bi-tools "></i>{' '}Modificar</Button>
-          <Button variant="danger" className="mx-3" onClick={handleShow}><i className="bi bi-tools"></i>{' '}Eliminar</Button>
+          <Button variant="info" onClick={handleShowAnexar}><i className="bi bi-file-earmark-text-fill"></i>{' '}Agregar Archivo</Button>
+          <Button variant="warning" className="mx-3" onClick={handleShowModificar}><i className="bi bi-tools "></i>{' '}Modificar</Button>
+          <Button variant="danger" onClick={handleShow}><i className="bi bi-tools"></i>{' '}Eliminar</Button>
         </Card.Footer>
       }
     </Card>
@@ -106,7 +122,10 @@ export const Noticia = ({noticia, isModal = false}) => {
         <Modal.Header closeButton>
           <Modal.Title>Eliminar Publicación</Modal.Title>
         </Modal.Header>
-        <Modal.Body>¿Desea eliminar esta publicación y los archivos incluidos en la misma? Esta acción no puede revertirse.</Modal.Body>
+        <Modal.Body>¿Desea eliminar esta publicación? Esta acción no puede revertirse.</Modal.Body>
+        <div className="d-flex mx-3 mb-4">
+          <input type="checkbox" style={{marginRight: '1rem', width: '1.5rem'}} checked={deleteFiles} onChange={handleToggle}/> Eliminar archivos adjuntos.
+        </div>
         <Modal.Footer>
           <Button variant="secondary" className="px-3" onClick={handleClose}>
             Volver
@@ -123,6 +142,9 @@ export const Noticia = ({noticia, isModal = false}) => {
       }
       <Modal size='lg' show={showModificar} onHide={handleCloseModificar}>
         <ModificarPublicacion handleClose={handleCloseModificar} noticia={noticia}/>
+      </Modal>
+      <Modal size='lg' show={showAnexar} onHide={handleCloseAnexar}>
+        <AnexarArchivo handleClose={handleCloseAnexar} noticia={noticia}/>
       </Modal>
     </>
   );

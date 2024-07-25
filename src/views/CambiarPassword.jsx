@@ -33,6 +33,7 @@ export const CambiarPassword = () => {
 
   useEffect(() => {
     if(correct === true){
+      localStorage.removeItem('user-token')
       window.location.reload()
       actualizarTitulo('Contraseña actualizada')
       setContent('Su contraseña ha sido actualizada exitosamente.')

@@ -1,24 +1,30 @@
 import { useState, useEffect } from 'react';
 
-const useValidate = (userId) => {
-  const [valid, setValid] = useState(false);
-  const [userData, setUserData] = useState({});
+const useValidate = (token) => {
+  const [userData, setUserData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log('refetch')
-        const response = await fetch(process.env.REACT_APP_API_URL + '/validate/' + userId, {
+        const headers = {
+          "Authorization": 'Bearer '+ token,
+          "Content-Type": "application/json"
+        };
+
+        const response = await fetch(process.env.REACT_APP_API_URL + '/usuarios/verify', {
           method: "GET",
+          headers: headers
         });
         if (!response.ok) {
+          setUserData(null)
           throw new Error("Error al iniciar sesion");
         }
-        const jsonData = await response.json();
-        setUserData(jsonData)
-        setValid(jsonData.valid);
+        else{
+          const jsonData = await response.json();
+          setUserData(jsonData.user)
+        }
         setIsLoading(false);
       } catch (error) {
         setError(error.message);
@@ -26,12 +32,15 @@ const useValidate = (userId) => {
       }
     };
 
-    if(userId){
+    if(token){
       fetchData();
     }
-  }, [userId]);
+    else{
+      setUserData(null)
+    }
+  }, [token]);
 
-  return { valid, userData, isLoading, error };
+  return { userData, isLoading, error };
 };
 
 export default useValidate;
