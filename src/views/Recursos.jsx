@@ -17,6 +17,9 @@ import { Oficios } from "./Oficios.jsx";
 import { CajaHerramientasLaminas } from "../components/CajaHerramientasLaminas.jsx";
 import useForm from "../hooks/useForm.js";
 import '../assets/styles/recursos.css'
+import { CajaHerramientasLaminasSalud } from "../components/CajaHerramientasLaminasSalud.jsx";
+import { CajaHerramientasProtocolos } from "../components/CajaHerramientasProtocolos.jsx";
+import { CajaHerramientasOtros } from "../components/CajaHerramientasOtros.jsx";
 
 export const Recursos = () => {
   useTitle("Recursos");
@@ -148,9 +151,27 @@ export const Recursos = () => {
                 </>
               }
               {
-                view === 'herr-laminas' &&
+                view === 'herr-instrumentos' &&
                 <>
                   <CajaHerramientasLaminas />
+                </>
+              }
+              {
+                view === 'herr-manuales' &&
+                <>
+                  <CajaHerramientasLaminasSalud />
+                </>
+              }
+              {
+                view === 'herr-lineamientos' &&
+                <>
+                  <CajaHerramientasProtocolos />
+                </>
+              }
+              {
+                view === 'herr-otros' &&
+                <>
+                  <CajaHerramientasOtros />
                 </>
               }
             </Container>

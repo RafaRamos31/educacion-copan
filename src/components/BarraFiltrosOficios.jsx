@@ -46,7 +46,19 @@ export const BarraFiltrosOficios = ({setDocumentos, setImagenes, setView}) => {
             <NavDropdown title="Caja de Herramientas" id="herramientas-dropdown">
               <NavDropdown.Item href="#herramientas" onClick={() => setView('herramientas')}>¿Qué es la Caja de Herramientas?</NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#herr-laminas" onClick={() => setView('herr-laminas')}>Instrumentos Educativos</NavDropdown.Item>
+              {
+                process.env.REACT_APP_WEB_SECTOR === '1' ?
+                <>
+                  <NavDropdown.Item href="#herr-manuales" onClick={() => setView('herr-manuales')}>Manuales y Guías</NavDropdown.Item>
+                  <NavDropdown.Item href="#herr-lineamientos" onClick={() => setView('herr-lineamientos')}>Lineamientos y Protocolos</NavDropdown.Item>
+                  <NavDropdown.Item href="#herr-otros" onClick={() => setView('herr-otros')}>Otras Herramientas</NavDropdown.Item>
+                </>
+                :
+                <>
+                  <NavDropdown.Item href="#herr-instrumentos" onClick={() => setView('herr-instrumentos')}>Instrumentos Educativos</NavDropdown.Item>
+                </>
+              }
+              
             </NavDropdown>
           </Nav>
       </Navbar>
