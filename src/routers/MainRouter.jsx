@@ -9,6 +9,7 @@ import { RefetchContextProvider } from '../contexts/RefetchContext'
 import { ToastContextProvider } from '../contexts/ToastContext'
 import { GestionRoles } from '../views/GestionRoles'
 import { Configuraciones } from '../views/Configuraciones'
+import { REDIAN } from '../views/REDIAN'
 
 export const MainRouter = () => {
   return (
@@ -20,6 +21,7 @@ export const MainRouter = () => {
         <Route path="noticias" element={<Noticias />}></Route>
         <Route path="contacto" element={<Contacto />}></Route>
         <Route path="recursos" element={<Recursos />}></Route>
+        <Route path="redian" element={<REDIAN />}></Route>
         <Route path="login" element={<Login />}></Route>
         <Route path="publicar" element={<Publicar />}></Route>
         <Route path="admin/config" element={<Configuraciones />}></Route>
