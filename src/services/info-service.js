@@ -1,6 +1,6 @@
 export const getTitle = (i) => {
   const titulos = {
-    1: 'Región Sanitaria de Salud',
+    1: 'Región Sanitaria Departamental de Salud',
     2: 'Dirección Departamental de Educación',
   }
   return titulos[i];
