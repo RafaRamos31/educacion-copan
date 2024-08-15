@@ -40,7 +40,7 @@ export const HomeImage = ({imagen, edit=false}) => {
     <>
     {
       imagen && imagen.enlace ?
-      <iframe style={{border: 0}} title={imagen.enlace} height={imagen?.nombre !== 'Organigrama' ? 300 : 600}
+      <iframe style={{border: 0}} title={imagen.enlace} height={imagen?.nombre !== 'Organigrama' ? 300 : 600} width={imagen?.nombre !== 'Organigrama' ? 'auto' : 700}
       src={getImageUrl(imagen.enlace)}
       ></iframe>
       :
