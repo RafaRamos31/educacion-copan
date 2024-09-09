@@ -5,6 +5,7 @@ export async function sendContacto(values) {
   formValues.append("municipioId", values.municipioId);
   formValues.append("establecimiento", values.establecimiento);
   formValues.append("telefono", values.telefono);
+  formValues.append("correo", values.correo);
 
   try {
     const response = await fetch(process.env.REACT_APP_API_URL + '/contactos', {
@@ -27,6 +28,7 @@ export async function editContacto(values) {
   formValues.append("municipioId", values.municipioId);
   formValues.append("establecimiento", values.establecimiento);
   formValues.append("telefono", values.telefono);
+  formValues.append("correo", values.correo);
 
   try {
     const response = await fetch(process.env.REACT_APP_API_URL + '/contactos', {

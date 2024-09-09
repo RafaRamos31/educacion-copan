@@ -17,7 +17,8 @@ export const FormEditContacto = ({handleClose, contacto, handleDeleteContacto}) 
     id: contacto?._id,
     municipioId: contacto?.municipio,
     establecimiento: contacto?.establecimiento,
-    telefono: contacto?.telefono
+    telefono: contacto?.telefono,
+    correo: contacto?.correo
   });
 
   //Boton de carga
@@ -68,6 +69,7 @@ export const FormEditContacto = ({handleClose, contacto, handleDeleteContacto}) 
           <FloatingLabel label="Establecimiento">
             <Form.Control
               placeholder="Nombre del Establecimiento/Contacto"
+              autoComplete="off"
               name='establecimiento'
               id='establecimiento'
               onChange={handleChange}
@@ -80,10 +82,24 @@ export const FormEditContacto = ({handleClose, contacto, handleDeleteContacto}) 
           <FloatingLabel label="Teléfono">
             <Form.Control
               placeholder="Número de Teléfono"
+              autoComplete="off"
               name='telefono'
               id='telefono'
               onChange={handleChange}
               value={values.telefono}
+            />
+          </FloatingLabel>
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <FloatingLabel label="Correo Electrónico">
+            <Form.Control
+              placeholder="Correo Electrónico"
+              type="email"
+              name='correo'
+              id='correo'
+              onChange={handleChange}
+              value={values.correo}
             />
           </FloatingLabel>
         </Form.Group>

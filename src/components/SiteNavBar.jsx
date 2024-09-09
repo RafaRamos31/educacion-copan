@@ -54,7 +54,7 @@ export const SiteNavBar = () => {
             height="40"
             className="d-inline-block align-top"
           />
-          <label className="mt-1 mx-1" style={{cursor: 'pointer'}}>
+          <label className="mt-1 mx-1 nav-title" style={{cursor: 'pointer'}}>
           {` ${getTitle(process.env.REACT_APP_WEB_SECTOR)} de ${getDepartamento(process.env.REACT_APP_WEB_DEPTO)}`}
           </label>
         </Navbar.Brand>

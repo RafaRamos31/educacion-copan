@@ -116,9 +116,6 @@ b{
 }
 
 @media screen and (max-width: 760px) {
-  #main-title{
-    font-size: 3rem;
-  }
   
   #text-departamento{
     margin: 2rem 0;

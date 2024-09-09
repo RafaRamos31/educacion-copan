@@ -74,7 +74,7 @@ export const Home = () => {
     <>
     <Layout pagina={'Inicio'}>
       <Container>
-        <section>
+        <section className="initial-view">
           {
               (userData && userData.rol === 'ADMIN') ? 
               <>
@@ -83,7 +83,7 @@ export const Home = () => {
               : ''
           }
           <HomeBackground />
-          <h1 id="main-title" className="animate__animated animate__fadeInUp py-5">{`${getTitle(process.env.REACT_APP_WEB_SECTOR)} de ${getDepartamento(process.env.REACT_APP_WEB_DEPTO)}`}</h1>
+          <h1 className="main-title animate__animated animate__fadeInUp py-5">{`${getTitle(process.env.REACT_APP_WEB_SECTOR)} de ${getDepartamento(process.env.REACT_APP_WEB_DEPTO)}`}</h1>
         </section>
 
         <section className="sobre-nosotros" id="sobre-nosotros">

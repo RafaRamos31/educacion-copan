@@ -83,7 +83,15 @@ export const Contacto = () => {
                       <ul>
                         {
                           municipio.contactos.map((ref, i) => (
-                            <li key={i}>{`${ref.establecimiento}: ${ref.telefono}`}</li>
+                            <>
+                              <label key={`${i}-label`} style={{fontWeight:'bold', fontSize: '1.2rem', marginTop: '0.3rem'}}  >{`${ref.establecimiento}:`}</label>
+                              {
+                                ref.telefono && <p key={`${i}-phone`} className="my-0"><i className="bi bi-telephone-fill"></i>{` ${ref.telefono}`}</p>
+                              }
+                              {
+                                ref.correo && <p key={`${i}-email`} className="my-0"><i className="bi bi-envelope-at-fill"></i>{` ${ref.correo}`}</p>
+                              }
+                            </>
                           ))
                         }
                       </ul>

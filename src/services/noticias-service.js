@@ -9,8 +9,16 @@ export async function sendNoticia(url, values) {
     formValues.append(el.nombre, el);
   }
 
+  const token = localStorage.getItem("user-token")
+
+  const headers = {
+    "Authorization": 'Bearer '+ token
+  };
+
   try {
+    
     const response = await fetch(url, {
+      headers: headers,
       method: "POST",
       body: formValues,
     });

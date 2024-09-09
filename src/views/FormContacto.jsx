@@ -16,7 +16,8 @@ export const FormContacto = ({handleClose, handleAddContacto}) => {
   const { values, handleChange } = useForm({
     municipio: '',
     establecimiento: '',
-    telefono: ''
+    telefono: '',
+    correo: ''
   });
 
   //Boton de carga
@@ -68,6 +69,7 @@ export const FormContacto = ({handleClose, handleAddContacto}) => {
           <FloatingLabel label="Establecimiento">
             <Form.Control
               placeholder="Nombre del Establecimiento/Contacto"
+              autoComplete="off"
               name='establecimiento'
               id='establecimiento'
               onChange={handleChange}
@@ -80,10 +82,25 @@ export const FormContacto = ({handleClose, handleAddContacto}) => {
           <FloatingLabel label="Teléfono">
             <Form.Control
               placeholder="Número de Teléfono"
+              autoComplete="off"
               name='telefono'
               id='telefono'
               onChange={handleChange}
               value={values.telefono}
+            />
+          </FloatingLabel>
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <FloatingLabel label="Correo Electrónico">
+            <Form.Control
+              placeholder="Correo Electrónico"
+              autoComplete="off"
+              type="email"
+              name='correo'
+              id='correo'
+              onChange={handleChange}
+              value={values.correo}
             />
           </FloatingLabel>
         </Form.Group>

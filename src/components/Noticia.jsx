@@ -11,6 +11,7 @@ import { ModificarPublicacion } from "../views/ModificarPublicacion";
 import { AnexarArchivo } from "../views/AnexarArchivo";
 
 export const Noticia = ({noticia, isModal = false}) => {
+
   //Status delete archivos
   const [deleteFiles, setDeleteFiles] = useState(false);
   const handleToggle = () => {
@@ -94,8 +95,12 @@ export const Noticia = ({noticia, isModal = false}) => {
           </Col>
           <Col sm={4}>
             <div className="d-flex flex-column align-items-end">
-              <h6>{getDateString(noticia.fechaPublicacion)}</h6>
-              <h6>{noticia.municipio.nombre}</h6>
+              <h6><i className="bi bi-calendar2"></i> {getDateString(noticia.fechaPublicacion)}</h6>
+              <h6><i className="bi bi-geo-alt-fill"></i> {noticia.municipio.nombre}</h6>
+              {
+                (userData && userData.rol === 'ADMIN') && 
+                <h6><i className="bi bi-person-fill"></i> {noticia.autor?.nombre}</h6>
+              }
             </div>
           </Col>
         </Row>
