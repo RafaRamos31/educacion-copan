@@ -16,6 +16,7 @@ export const ConfiguracionContactos = ({data, handleClose=null}) => {
           municipio: contacto.municipio._id,
           municipioName: contacto.municipio.nombre,
           telefono: contacto.telefono,
+          correo: contacto.correo,
         })
       }
       return muni;

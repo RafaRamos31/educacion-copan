@@ -52,7 +52,7 @@ export const EditValor = ({valor}) => {
     <div className='my-3 d-flex justify-content-between align-items-center' style={{backgroundColor: 'lightcyan', padding: '1rem', fontSize: '1.1rem'}}>
       {`${valorData.nombre}: ${valorData.descripcion}`}
       <div>
-      <Button className='mx-2' variant='info' onClick={handleShow} ><i className="bi bi-pencil-fill"></i></Button>
+      <Button variant='info' onClick={handleShow} ><i className="bi bi-pencil-fill"></i></Button>
       <Button variant='danger' onClick={handleShowEliminar}><i className="bi bi-trash-fill"></i></Button>
       </div>
     </div>
@@ -68,12 +68,15 @@ export const EditValor = ({valor}) => {
       </Modal.Header>
       <Modal.Body>¿Desea eliminar este Valor? Esta accion no puede revertirse.</Modal.Body>
       <Modal.Footer>
+        <>
         <Button variant="secondary" className="px-3" onClick={handleCloseEliminar}>
           Volver
         </Button>
         <Button variant="danger" className="px-3" onClick={handleDelete}>
           Eliminar
         </Button>
+        </>
+        
       </Modal.Footer>
     </Modal>
     </>
