@@ -1,6 +1,4 @@
 import { Navbar, Container, Nav, Button, Modal, NavDropdown } from "react-bootstrap";
-import logoEducacion from "../assets/images/logos/logo-educacion.png";
-import logoSalud from "../assets/images/logos/logo_sesal.png";
 import { Link, useNavigate } from "react-router-dom";
 import { Login } from "../views/Login";
 import { useContext, useState, useEffect } from "react";
@@ -8,13 +6,14 @@ import { logout } from "../services/login-service";
 import { UserContext } from "../contexts/UserContext";
 import { CambiarPassword } from "../views/CambiarPassword";
 import { getDepartamento, getTitle } from "../services/info-service";
+import { getNavBarLogo } from "../services/navlogo-helper";
 
 export const SiteNavBar = () => {
   const [actual, setActual] = useState('');
 
   const navigate = useNavigate();
 
-  const logo = process.env.REACT_APP_WEB_SECTOR === '1' ? logoSalud : logoEducacion;
+  const logo = getNavBarLogo();
 
   //Contexts
   const { userData } = useContext(UserContext);

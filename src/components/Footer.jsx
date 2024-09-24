@@ -136,6 +136,19 @@ export const Footer = () => {
             }
 
             {
+              values.tiktok &&
+              <a
+              className="btn btn-primary btn-floating m-1"
+              style={{backgroundColor: "black"}}
+              href={values.tiktok}
+              target="_blank"
+              rel="noreferrer"
+              role="button"
+              ><i className="bi bi-tiktok"></i>
+              </a>
+            }
+
+            {
               values.youtube &&
               <a
               className="btn btn-primary btn-floating m-1"

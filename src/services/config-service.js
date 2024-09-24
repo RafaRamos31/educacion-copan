@@ -60,6 +60,7 @@ export async function updateFooterConfig(values) {
   formValues.append("instagram", values.instagram);
   formValues.append("youtube", values.youtube);
   formValues.append("twitter", values.twitter);
+  formValues.append("tiktok", values.tiktok);
   
   try {
     const response = await fetch(process.env.REACT_APP_API_URL + '/footer', {

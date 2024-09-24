@@ -69,6 +69,12 @@ export const ConfiguracionFooter = ({data, handleClose=null}) => {
           </FloatingLabel>
         </Form.Group>
 
+        <Form.Group className="mb-4">
+          <FloatingLabel label="TikTok">
+            <Form.Control aria-label="tiktok"  id="tiktok" name="tiktok" value={values.tiktok}  onChange={handleChange} required/>
+          </FloatingLabel>
+        </Form.Group>
+
       </Form>  
       </Card.Body>
       <Card.Footer>
