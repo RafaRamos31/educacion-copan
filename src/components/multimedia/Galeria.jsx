@@ -2,6 +2,7 @@ import { Carousel, Modal } from 'react-bootstrap'
 import { ImagenGaleria } from './ImagenGaleria'
 import { Fotografia } from './Fotografia'
 import { useState } from 'react'
+import { getFileEnlace } from '../../services/stringFormatter'
 
 export const Galeria = ({archivos}) => {
 
@@ -15,7 +16,7 @@ export const Galeria = ({archivos}) => {
   }
 
   if(archivos.length === 1){
-    return <Fotografia enlace={archivos[0].enlace}/>
+    return <Fotografia enlace={getFileEnlace(archivos[0].fileId)}/>
   }
 
   return (
@@ -25,7 +26,7 @@ export const Galeria = ({archivos}) => {
           archivos.map((archivo) => (
             <Carousel.Item key={archivo._id} onClick={handleShowVista} style={{height: '300px'}}>
               <div className='h-100 w-100 d-flex jusfity-content-center align-items-center' style={{maxWidth: '95vw'}}>
-                <ImagenGaleria key={archivo._id} enlace={archivo.enlace}/>
+                <ImagenGaleria key={archivo._id} enlace={getFileEnlace(archivo.fileId)}/>
               </div>
             </Carousel.Item>
           ))
@@ -38,7 +39,7 @@ export const Galeria = ({archivos}) => {
             archivos.map((archivo) => (
               <Carousel.Item key={archivo._id}>
                 <div className='d-flex jusfity-content-center align-items-center' style={{maxWidth: '95vw'}}>
-                  <ImagenGaleria key={archivo._id} enlace={archivo.enlace} modal/>
+                  <ImagenGaleria key={archivo._id} enlace={getFileEnlace(archivo.fileId)} modal/>
                 </div>
               </Carousel.Item>
             ))

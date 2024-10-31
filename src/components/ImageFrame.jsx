@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from 'react'
 import { UserContext } from '../contexts/UserContext'
 import { ToastContext } from '../contexts/ToastContext'
 import { eliminarArchivo } from '../services/archivos-service'
+import { getFileEnlace } from '../services/stringFormatter'
 
 export const ImageFrame = ({imagen, imageId}) => {
   //Visibilidad del componente
@@ -54,7 +55,7 @@ export const ImageFrame = ({imagen, imageId}) => {
         <p>{imagen.nombre}</p>
       </Card.Header>
       <Card.Body className='d-flex align-items-center justify-content-center'>
-        <Fotografia key={imagen._id} enlace={imagen.enlace}/>
+        <Fotografia key={imagen._id} enlace={getFileEnlace(imagen.fileId)}/>
       </Card.Body>
       {
         (userData) &&

@@ -5,6 +5,7 @@ import { UserContext } from '../../contexts/UserContext';
 import { ToastContext } from '../../contexts/ToastContext';
 import '../../assets/styles/documento.css'
 import { ModificarArchivo } from '../../views/ModificarArchivo.jsx';
+import { getFileDescargar } from '../../services/stringFormatter.js';
 
 export const Documento = ({archivo}) => { 
   //Visibilidad del componente
@@ -94,7 +95,7 @@ export const Documento = ({archivo}) => {
           </Button>
           {
             !charging ? 
-            <Button variant='info' href={archivo.descargar} onClick={handleDownload}>
+            <Button variant='info' href={getFileDescargar(archivo.fileId)} onClick={handleDownload}>
               <i className="bi bi-download"></i>{' '}Descargar
             </Button>
             : <Button variant="info"> 

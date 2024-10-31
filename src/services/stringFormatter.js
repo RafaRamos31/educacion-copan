@@ -11,3 +11,16 @@ export function getImageUrl(originalUrl) {
   const id = originalUrl.split("/")[5];
   return `https://drive.google.com/file/d/${id}/preview`;
 }
+
+
+export function getHomeImageURL(fileId){
+  return `https://drive.google.com/file/d/${fileId}/view`;
+}
+
+export function getFileEnlace(fileId){
+  return `https://drive.google.com/file/d/${fileId}/view`;
+}
+
+export function getFileDescargar(fileId){
+  return `https://drive.google.com/u/0/uc?id=${fileId}&export=download`;
+}
