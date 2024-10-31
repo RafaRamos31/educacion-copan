@@ -7,7 +7,6 @@ import { Configuracion } from "./Configuracion.jsx";
 import { LoadingScreen } from "./LoadingScreen.jsx";
 import { HomeImage } from "../components/FrameCambiarImagen.jsx";
 import { ConfiguracionValores } from "./ConfiguracionValores.jsx";
-import { getDepartamento, getTitle } from "../services/info-service.js";
 import { HomeBackground } from "../components/HomeBackground.jsx";
 import '../assets/styles/home.css';
 
@@ -83,7 +82,6 @@ export const Home = () => {
               : ''
           }
           <HomeBackground />
-          <h1 className="main-title animate__animated animate__fadeInUp py-5">{`${getTitle(process.env.REACT_APP_WEB_SECTOR)} de ${getDepartamento(process.env.REACT_APP_WEB_DEPTO)}`}</h1>
         </section>
 
         <section className="sobre-nosotros" id="sobre-nosotros">
